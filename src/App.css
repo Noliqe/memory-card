@@ -1,0 +1,18 @@
+.poke {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.card {
+  height: 165px;
+  width: 165px;
+  background-color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pokeImg {
+  height: 160px;
+}
