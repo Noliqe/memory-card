@@ -6,20 +6,23 @@ import Scoreboard from './scoreboard';
 
 
 function Game() {
-  const [cards, setCards] = useState(RandomCard());
+  const [level, setLevel] = useState(1);
+  const [cards, setCards] = useState(RandomCard(level));
   const [currentScore, setCurrentScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [renderCards, setRenderCards] = useState(0);
 
   // check if card is already clicked on
   const ifClickedOn = (index) => {
     if (cards[index].check === false) {
       let prevCards = cards;
       prevCards[index].check = true;
-      // replace cards with updated array
       setCards(prevCards);
-      // add 1 to current score
+
       setCurrentScore(currentScore + 1);
-      onClick();
+      if (checkLevelUp() === false) {
+        onClick();
+      }
     } else {
       if (currentScore > highScore) {
         setHighScore(currentScore);
@@ -30,17 +33,47 @@ function Game() {
     }
   }
 
+  // check if all cards are true before level up
+  const checkLevelUp = () => {
+    for (let i = 0; i < cards.length; i++) {
+      if (cards[i].check === false) {
+        return false;
+      } 
+    }
+    setRenderCards(1);
+    setLevel(level + 1);
+  }
+
+  useEffect(() => {
+    setCards(RandomCard(level));
+  }, [level]);
+
+  useEffect(() => {
+    if (renderCards === 1) {
+      console.log('renderCards true... load new level')
+      setRenderCards(0);
+      makePokeCards();
+    }
+  }, [cards]);
+
+  useEffect(() => {
+    if (currentScore >= highScore) {
+      setHighScore(currentScore);
+    }
+  }, [currentScore]);
+
+
   const gameOver = () => {
     //empty
   }
 
   const onClick = () => {
-    console.log('shuffle cards');
     setCards(shuffle());
   }
 
     // shuffle cards array
   const shuffle = () => {
+    console.log('shuffle...')
     let shuffled = cards
     .map(value => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
@@ -49,14 +82,10 @@ function Game() {
     return shuffled;
   }
 
-  // when cards change, call function level
-  useEffect(() => {
-    level();
-  }, [cards]);
-
-  const level = () => {
+  const makePokeCards = () => {
+    let numberOfCards = level + 2;
     const pokeArray = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < numberOfCards; i++) {
         const num = cards[i].id;
         const pokeUrl = cards[i].src;
         pokeArray.push(<Card key={num} id={num} index={i} src={pokeUrl} check={ifClickedOn}/>)
@@ -66,10 +95,17 @@ function Game() {
     </div>
   }
 
+  // stop render when level is over
+  const handleRender = () => {
+    if (renderCards === 0) {
+      return makePokeCards()
+    }
+  }
+
   return (
     <div className='game'>
-        <Scoreboard current={currentScore} highScore={highScore}/>
-        {level()}
+        <Scoreboard current={currentScore} highScore={highScore} level={level}/>
+        {handleRender()}
     </div>
   );
 }
