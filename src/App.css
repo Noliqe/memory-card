@@ -1,3 +1,28 @@
+html {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  --background-color-header: orange;
+  --background-color-scoreboard: pink;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  background-color: var(--background-color-header);
+}
+
+.scoreboard {
+  display: flex;
+  width: 100vw;
+  justify-content: space-around;
+  background-color: var(--background-color-scoreboard);
+}
+
 .poke {
   display: flex;
   flex-direction: row;

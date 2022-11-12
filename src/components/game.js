@@ -2,23 +2,40 @@
 import React, { useState, useEffect } from 'react';
 import Card from './card';
 import RandomCard from './randomCard';
+import Scoreboard from './scoreboard';
 
 
 function Game() {
   const [cards, setCards] = useState(RandomCard());
+  const [currentScore, setCurrentScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
 
+  // check if card is already clicked on
   const ifClickedOn = (index) => {
-    if (cards[index].clickedOn === false) {
+    if (cards[index].check === false) {
       let prevCards = cards;
-      prevCards[index].clickedOn = true;
+      prevCards[index].check = true;
+      // replace cards with updated array
       setCards(prevCards);
+      // add 1 to current score
+      setCurrentScore(currentScore + 1);
       onClick();
     } else {
+      if (currentScore > highScore) {
+        setHighScore(currentScore);
+      }
+      // set current score back to zero
+      setCurrentScore(0);
       console.log('gameover');
     }
   }
 
+  const gameOver = () => {
+    //empty
+  }
+
   const onClick = () => {
+    console.log('shuffle cards');
     setCards(shuffle());
   }
 
@@ -51,6 +68,7 @@ function Game() {
 
   return (
     <div className='game'>
+        <Scoreboard current={currentScore} highScore={highScore}/>
         {level()}
     </div>
   );
