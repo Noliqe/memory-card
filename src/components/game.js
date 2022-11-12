@@ -7,6 +7,17 @@ import RandomCard from './randomCard';
 function Game() {
   const [cards, setCards] = useState(RandomCard());
 
+  const ifClickedOn = (index) => {
+    if (cards[index].clickedOn === false) {
+      let prevCards = cards;
+      prevCards[index].clickedOn = true;
+      setCards(prevCards);
+      onClick();
+    } else {
+      console.log('gameover');
+    }
+  }
+
   const onClick = () => {
     setCards(shuffle());
   }
@@ -31,7 +42,7 @@ function Game() {
     for (let i = 0; i < 5; i++) {
         const num = cards[i].id;
         const pokeUrl = cards[i].src;
-        pokeArray.push(<Card key={num} id={num} src={pokeUrl} click={onClick}/>)
+        pokeArray.push(<Card key={num} id={num} index={i} src={pokeUrl} check={ifClickedOn}/>)
     };
     return <div className='poke'>
       {pokeArray}

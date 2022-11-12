@@ -12,7 +12,7 @@ function RandomCard() {
     for (let i = 0; i < 5; i++) {
         const num = randomNum + i;
         const pokeUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + num + '.png';
-        cardsArray.push({id: num, src: pokeUrl});
+        cardsArray.push({id: num, src: pokeUrl, clickedOn: false});
     };
     return cardsArray
   }
