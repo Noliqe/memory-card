@@ -6,7 +6,7 @@ function Card(props) {
   return (
     <div className='card'>
         {/* <img className='pokeImg' src={props.link} alt='pokemon' onClick={() => setClickedOn(true)}></img> */}
-        <img className='pokeImg' src={props.link} alt='pokemon' onClick={() => {setClickedOn(true); props.click()}}></img>
+        <img className='pokeImg' src={props.src} alt='pokemon' onClick={() => {setClickedOn(true); props.click()}}></img>
     </div>
   );
 }
