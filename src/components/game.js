@@ -1,22 +1,29 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from './card';
+import RandomCard from './randomCard';
+
 
 function Game() {
+  const [cards, setCards] = useState(RandomCard());
 
-  const randomNumber = () => {
-    return parseInt(Math.floor(Math.random() * 601));
+  const onClick = () => {
+    console.log('hello');
   }
 
+  // useEffect(() => {
+  //   setCards(RandomCard());
+  // }, []);
+
   const level = () => {
-    const randomNum = randomNumber();
     const pokeArray = [];
     for (let i = 0; i < 5; i++) {
-        const num = randomNum + i;
-        const pokeUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + num + '.png';
-        pokeArray.push(<Card key={num} id={num} link={pokeUrl}/>)
-    }
+        const num = cards[i].id;
+        const pokeUrl = cards[i].src;
+        pokeArray.push(<Card key={num} id={num} link={pokeUrl} click={onClick}/>)
+    };
     return <div className='poke'>
-        {pokeArray}
+      {pokeArray}
     </div>
   }
 
