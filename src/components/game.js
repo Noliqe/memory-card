@@ -65,10 +65,20 @@ function Game() {
   // if game is over, reset game
   const gameOver = () => {
     console.log('Game over');
+    resetCheck();
     setGameIsOver(true);
     setRenderCards(1);
     setCurrentScore(0);
     setLevel(1);
+  }
+
+  const resetCheck = () => {
+    console.log('Resetting check...');
+    let prevCards = cards;
+    for (let i = 0; i < cards.length; i++) {
+      prevCards[i].check = false;
+    }
+    setCards(prevCards);
   }
 
   const startGame = () => {
