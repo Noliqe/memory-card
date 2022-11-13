@@ -10,7 +10,26 @@ function Game() {
   const [cards, setCards] = useState(RandomCard(level));
   const [currentScore, setCurrentScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [gameIsOver, setGameIsOver] = useState(false);
   const [renderCards, setRenderCards] = useState(0);
+
+  useEffect(() => {
+    setCards(RandomCard(level));
+  }, [level]);
+
+  useEffect(() => {
+    if (renderCards === 1 && gameIsOver === false) {
+      console.log('RenderCards true... load new level')
+      setRenderCards(0);
+      makePokeCards();
+    }
+  }, [cards]);
+
+  useEffect(() => {
+    if (currentScore >= highScore) {
+      setHighScore(currentScore);
+    }
+  }, [currentScore]);
 
   // check if card is already clicked on
   const ifClickedOn = (index) => {
@@ -28,8 +47,7 @@ function Game() {
         setHighScore(currentScore);
       }
       // set current score back to zero
-      setCurrentScore(0);
-      console.log('gameover');
+      gameOver();
     }
   }
 
@@ -44,36 +62,29 @@ function Game() {
     setLevel(level + 1);
   }
 
-  useEffect(() => {
-    setCards(RandomCard(level));
-  }, [level]);
-
-  useEffect(() => {
-    if (renderCards === 1) {
-      console.log('renderCards true... load new level')
-      setRenderCards(0);
-      makePokeCards();
-    }
-  }, [cards]);
-
-  useEffect(() => {
-    if (currentScore >= highScore) {
-      setHighScore(currentScore);
-    }
-  }, [currentScore]);
-
-
+  // if game is over, reset game
   const gameOver = () => {
-    //empty
+    console.log('Game over');
+    setGameIsOver(true);
+    setRenderCards(1);
+    setCurrentScore(0);
+    setLevel(1);
   }
 
+  const startGame = () => {
+    console.log('Restarting game..');
+    setGameIsOver(false);
+    setRenderCards(0);
+  }
+
+  // on card click shuffle cards
   const onClick = () => {
     setCards(shuffle());
   }
 
     // shuffle cards array
   const shuffle = () => {
-    console.log('shuffle...')
+    console.log('Shuffle...')
     let shuffled = cards
     .map(value => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
@@ -102,10 +113,20 @@ function Game() {
     }
   }
 
+  const handleGameOver = () => {
+    if (gameIsOver === true) {
+      return <div className='gameOver'>
+        <h2>Game Over!</h2>
+        <button onClick={() => {startGame()}}>Try again</button>
+      </div>
+    }
+  }
+
   return (
     <div className='game'>
         <Scoreboard current={currentScore} highScore={highScore} level={level}/>
         {handleRender()}
+        {handleGameOver()}
     </div>
   );
 }
